@@ -36,14 +36,18 @@ class MainActivity : AppCompatActivity() {
 
         custom_button.setOnClickListener {
             download(buttonUrl)
-
+            custom_button.buttonState = ButtonState.Loading
         }
     }
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+            if(id == downloadID){
+                if(intent.action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)){
+                    custom_button.buttonState = ButtonState.Completed
+                }
+            }
         }
     }
 
@@ -65,7 +69,6 @@ class MainActivity : AppCompatActivity() {
                     .setAllowedOverRoaming(true)
             val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
             downloadID = downloadManager.enqueue(request)
-            custom_button.buttonState = ButtonState.Loading
         }
     }
 
