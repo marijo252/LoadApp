@@ -5,13 +5,13 @@
     <ConstraintSet android:id="@+id/start">
         <Constraint
             android:id="@+id/status_value"
-            android:alpha="0"/>
+            android:alpha="0.0"/>
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
             android:id="@id/status_value"
-            android:alpha="1"/>
+            android:alpha="1.0"/>
     </ConstraintSet>
 
     <Transition
