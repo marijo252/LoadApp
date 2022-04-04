@@ -95,7 +95,7 @@ class LoadingButton @JvmOverloads constructor(
             startValue as Float,
             widthSize.toFloat()
         ).apply {
-            duration = 1000
+            duration = 500
             interpolator = AccelerateInterpolator()
             addUpdateListener {
                 buttonLoadingWidth = it.animatedValue as Float
@@ -116,7 +116,7 @@ class LoadingButton @JvmOverloads constructor(
             startValue as Float,
             360f
         ).apply {
-            duration = 1000
+            duration = 500
             interpolator = AccelerateInterpolator()
             addUpdateListener {
                 circleLoadingAngle = it.animatedValue as Float

@@ -45,58 +45,58 @@ class MainActivity : AppCompatActivity() {
         )
 
         custom_button.setOnClickListener {
-            download(buttonUrl)
-            custom_button.buttonState = ButtonState.Loading
+            if (buttonUrl.isNotEmpty()) {
+                download(buttonUrl)
+                custom_button.buttonState = ButtonState.Loading
+            } else {
+                Toast.makeText(
+                    applicationContext,
+                    resources.getText(R.string.toast_selectRadioButton),
+                    Toast.LENGTH_LONG
+                )
+                .show()
+            }
         }
     }
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
-            if(id == downloadID){
+            if (id == downloadID) {
                 val notificationManager = ContextCompat.getSystemService(
                     context,
                     NotificationManager::class.java
                 ) as NotificationManager
                 custom_button.buttonState = ButtonState.Completed
-                notificationManager.cancelNotifications()
-                if(intent.action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)){
+                if (intent.action.equals(DownloadManager.ACTION_DOWNLOAD_COMPLETE)) {
                     notificationManager.sendNotification(
                         getString(R.string.notification_description),
                         context,
                         true,
-                        fileName)
-                }
-                else {
+                        fileName
+                    )
+                } else {
                     notificationManager.sendNotification(
                         getString(R.string.notification_description),
                         context,
                         false,
-                        fileName)
+                        fileName
+                    )
                 }
             }
         }
     }
 
     private fun download(url: String) {
-        if(url.isEmpty()){
-            Toast.makeText(
-                applicationContext,
-                resources.getText(R.string.toast_selectRadioButton),
-                Toast.LENGTH_LONG)
-                .show()
-        }
-        else{
-            val request =
-                DownloadManager.Request(Uri.parse(url))
-                    .setTitle(getString(R.string.app_name))
-                    .setDescription(getString(R.string.app_description))
-                    .setRequiresCharging(false)
-                    .setAllowedOverMetered(true)
-                    .setAllowedOverRoaming(true)
-            val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
-            downloadID = downloadManager.enqueue(request)
-        }
+        val request =
+            DownloadManager.Request(Uri.parse(url))
+                .setTitle(getString(R.string.app_name))
+                .setDescription(getString(R.string.app_description))
+                .setRequiresCharging(false)
+                .setAllowedOverMetered(true)
+                .setAllowedOverRoaming(true)
+        val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+        downloadID = downloadManager.enqueue(request)
     }
 
     companion object {
@@ -112,7 +112,8 @@ class MainActivity : AppCompatActivity() {
                     fileName = getString(R.string.glide_text)
                 }
                 R.id.radio_udacity -> if (checked) {
-                    buttonUrl = "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter0"
+                    buttonUrl =
+                        "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter0"
                     fileName = getString(R.string.loadApp_text)
                 }
                 R.id.radio_retrofit -> if (checked) {
@@ -130,9 +131,9 @@ class MainActivity : AppCompatActivity() {
                 channelName,
                 NotificationManager.IMPORTANCE_HIGH
             )
-            .apply {
-                setShowBadge(false)
-            }
+                .apply {
+                    setShowBadge(false)
+                }
 
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.RED
