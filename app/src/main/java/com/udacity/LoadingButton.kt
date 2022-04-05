@@ -8,6 +8,7 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
+import androidx.core.content.withStyledAttributes
 import kotlin.properties.Delegates
 
 class LoadingButton @JvmOverloads constructor(
@@ -20,14 +21,20 @@ class LoadingButton @JvmOverloads constructor(
     private var circleLoadingAngle = 0f
     private var buttonText = ""
     private val bound = Rect()
-
+    private var buttonColor = 0
     private var loadingAnimation = ValueAnimator()
     private var circleAnimation = ValueAnimator()
 
+    init {
+        context.withStyledAttributes(attrs, R.styleable.LoadingButton) {
+            buttonColor = getColor(R.styleable.LoadingButton_buttonColor, 0)
+            buttonText = getString(R.styleable.LoadingButton_buttonText).toString()
+        }
+    }
 
     private val paintButton = Paint().apply {
         style = Paint.Style.FILL
-        color = ContextCompat.getColor(context, R.color.colorPrimary)
+        color = buttonColor
     }
 
     private val paintLoadingButton = Paint().apply {
@@ -129,9 +136,8 @@ class LoadingButton @JvmOverloads constructor(
         circleAnimation.start()
     }
 
-    init {
-        buttonText = resources.getString(R.string.button_download)
-    }
+
+
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
